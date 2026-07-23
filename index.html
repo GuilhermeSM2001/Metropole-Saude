@@ -187,17 +187,7 @@ h3{font-family:var(--disp);font-weight:600;font-size:clamp(19px,1.7vw,26px);lett
 /* ===== camada 2 — assinatura de estúdio ===== */
 html{ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility }
 ::selection{background:var(--coral);color:#fff}
-/* cursor próprio */
-@media (pointer:fine){
-  body{cursor:none}
-  button,a,.dot,.btn{cursor:none}
-}
-#cur,#curring{position:fixed;top:0;left:0;pointer-events:none;z-index:200;mix-blend-mode:difference}
-#cur{width:10px;height:10px;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}
-#curring{width:38px;height:38px;border-radius:50%;border:1.5px solid #fff;transform:translate(-50%,-50%);
-  transition:width .25s ease,height .25s ease,opacity .25s ease}
-#curring.big{width:64px;height:64px;opacity:.85}
-@media (pointer:coarse){#cur,#curring{display:none}}
+/* cursor próprio removido — usa cursor do sistema */
 /* ghost words editoriais */
 .ghost{position:absolute;right:-.06em;bottom:-.12em;font-family:var(--disp);font-weight:700;
   line-height:.8;font-size:clamp(180px,30vw,520px);letter-spacing:-.04em;color:transparent;
@@ -262,7 +252,7 @@ html{ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility }
 #index button .n{font-size:.62em;color:var(--coral);font-weight:700;letter-spacing:.1em}
 #index .hintg{position:absolute;bottom:30px;left:0;right:0;text-align:center;color:#8d827c;
   font-family:var(--body);font-size:12px;letter-spacing:.12em}
-@media print{#cur,#curring,#net,#index,#play,#stitle,.blob,.rings{display:none}.ghost{opacity:.35}}
+@media print{#net,#index,#play,#stitle,.blob,.rings{display:none}.ghost{opacity:.35}}
 @media (prefers-reduced-motion: reduce){
   #net,.blob,.rings,.pivot h1{animation:none;display:none}
   .ghost{transition:none;opacity:1;transform:none}
@@ -535,7 +525,6 @@ html{ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility }
 <button class="fs" id="fs" title="Tela cheia (F)">⛶</button>
 <button id="play" title="Autoplay (P)">▶</button>
 <div id="stitle"></div>
-<div id="cur"></div><div id="curring"></div>
 <div id="index"><ol id="ixol"></ol><div class="hintg">G para fechar · clique para ir ao capítulo</div></div>
 <div class="arrows"><button id="prev">‹</button><button id="next">›</button></div>
 <div class="hud"><div class="dots" id="dots"></div></div>
@@ -704,21 +693,6 @@ addEventListener('keydown',e=>{
   else if(k==='escape'&&ixOpen){toggleIndex(false);}
 });
 
-/* cursor próprio */
-if(matchMedia('(pointer:fine)').matches){
-  const cur=document.getElementById('cur'),ring=document.getElementById('curring');
-  let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
-  addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    cur.style.transform=`translate(${mx-5}px,${my-5}px)`;
-    ring.classList.toggle('big',!!e.target.closest('button,a,.dot,.btn,.card'));
-  },{passive:true});
-  (function lerp(){
-    rx+=(mx-rx)*.16;ry+=(my-ry)*.16;
-    ring.style.transform=`translate(${rx-19}px,${ry-19}px)`;
-    requestAnimationFrame(lerp);
-  })();
-}
 
 /* partículas na capa */
 const net=document.getElementById('net');
